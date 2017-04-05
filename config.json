@@ -1,0 +1,11 @@
+{    
+    "port": 3002,
+    "env": "development",
+    "host": "http://localhost:3002",
+    "speechSettings":{        
+        "customEndpointUrl":"https://0b1975e0dfec4b8a80c417163b431faa.api.cris.ai/ws/cris/speech/recognize",
+        "subscriptionKey":"a3b9bcef7c0641f5ac4269c802957430",
+        "authenticationUri":"https://westus.api.cognitive.microsoft.com/sts/v1.0/issueToken",
+        "defaultLocale":"en-US"
+    }
+}
