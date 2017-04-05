@@ -77,6 +77,7 @@ let initSubscriptions = () => {
         } else {
             // fs.unlinkSync(d.data.filePath);
             console.log('returning back ','result is: ',d.result);
+            console.log('current directory is:',__dirname);
             d
                 .res
                 .json(d.result);
