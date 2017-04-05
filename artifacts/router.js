@@ -28,7 +28,7 @@ router.post('/api/mobile', function (req, res, next) {
             let timestamp = Number(new Date());
             let fileName = util.format("%s-%s-%s.%s", "testBinary", helper.getClientIp(req), timestamp, "wav");
             let filePath = util.format("%s%s", "temp\\", fileName);
-            
+            console.log('end point hit');
             fs.writeFile(filePath, data, 'binary', (err) => {
                 if (err) {
                     return (console.log(err));

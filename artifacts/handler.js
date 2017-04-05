@@ -76,6 +76,7 @@ let initSubscriptions = () => {
             console.log(d.data.error);
         } else {
             // fs.unlinkSync(d.data.filePath);
+            console.log('returning back');
             d
                 .res
                 .json(d.result);
