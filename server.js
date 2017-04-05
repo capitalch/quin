@@ -34,14 +34,14 @@ process.env.NODE_ENV = config.env;
 //for cross domain
 
 
-app.get('/exec', (req, res, next) => {
-    let child = exec('dir', function (error, stdout, stderr) {
-        console.log('stdout:', stdout);
-        console.log('stderr:', stderr);
-        if (error !== null) {
-            console.log('exec error:', error);
-        }
-    });
+app.get('/test', (req, res, next) => {
+    // let child = exec('dir', function (error, stdout, stderr) {
+    //     console.log('stdout:', stdout);
+    //     console.log('stderr:', stderr);
+    //     if (error !== null) {
+    //         console.log('exec error:', error);
+    //     }
+    // });
     res
         .status(200)
         .json({'result': 'ok'});
