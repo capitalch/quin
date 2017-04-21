@@ -52,9 +52,11 @@ let initSubscriptions = () => {
             console.log(d.data.error);
         } else {
             // fs.unlinkSync(d.data.filePath);
+            console.log('CRIS Node:' + d.result.textFromSpeech);
             d
                 .res
                 .json(d.result);
+            fs.unlinkSync(d.data.filePath);
         }
     });
 };
@@ -69,12 +71,12 @@ let httpRequest = (id, method, data, res, templateData) => {
         let options = {
             url: url,
             method: method,
-            json:true
+            json: true
         };
         if (data) {
             options = Object.assign(options, {
-                form: data
-                ,json: false
+                form: data,
+                json: false
             });
         }
         request(options, (error, response, body) => {
