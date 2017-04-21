@@ -1,5 +1,6 @@
 "use strict";
 var settings = require('./settings');
+var Mustache = require('mustache');
 var fs = require('fs');
 var config = JSON.parse(fs.readFileSync('./config.json', 'utf8'));
 var edge = require('edge');
@@ -8,8 +9,6 @@ var rx = require('rxjs');
 var def = require('./definitions');
 var messages = require('./messages');
 var subject = new rx.Subject();
-// let marshal =()=> edge.func({assemblyFile: 'SpeechRecognition.dll', typeName:
-// 'SpeechRecognition.JPConnector', methodName: 'Invoke'});
 
 var marshal = edge.func({assemblyFile: 'SpeechRecognition.dll', typeName: 'SpeechRecognition.JPConnector', methodName: 'Invoke'});
 
@@ -26,6 +25,7 @@ function initSpeechRecog(res, next) {
         }
     });
 };
+
 initSpeechRecog();
 exports.initSpeechRecog = initSpeechRecog;
 
@@ -44,40 +44,14 @@ exports.emit = emit;
 let filterOn = (id) => {
     return (subject.filter(d => d.id === id));
 }
+exports.filterOn = filterOn;
 
 let initSubscriptions = () => {
-    let sub1 = filterOn('post:cris').subscribe(d => {
-        if (d.data.error) {
-            console.log(d.data.error);
-        } else {
-            // d     .res     .json(d.data);
-            httpRequest('post:luis', 'POST', d.data, d.res);
-        }
-    });
-    let sub2 = filterOn('post:luis').subscribe(d => {
-        if (d.data.error) {
-            console.log(d.data.error);
-        } else {
-            // d     .res     .json(d.data);
-            httpRequest('post:pathFinder', 'POST', d.data, d.res);
-        }
-    });
-    let sub3 = filterOn('post:pathFinder').subscribe(d => {
-        if (d.data.error) {
-            console.log(d.data.error);
-        } else {
-            d
-                .res
-                .json(d.data);
-        }
-    });
-    let sub4 = filterOn('post:speech:to:text').subscribe(d => {
+    let sub1 = filterOn('post:speech:to:text').subscribe(d => {
         if (d.data.error) {
             console.log(d.data.error);
         } else {
             // fs.unlinkSync(d.data.filePath);
-            console.log('returning back ','result is: ',d.result);
-            console.log('current directory is:',__dirname);
             d
                 .res
                 .json(d.result);
@@ -86,16 +60,21 @@ let initSubscriptions = () => {
 };
 initSubscriptions();
 
-let httpRequest = (id, method, data, res) => {
+let httpRequest = (id, method, data, res, templateData) => {
     try {
+        let url = settings.urls[id];
+        if (templateData) { //mustache template
+            url = Mustache.render(url, templateData)
+        }
         let options = {
-            url: settings.urls[id],
-            method: method
+            url: url,
+            method: method,
+            json:true
         };
         if (data) {
             options = Object.assign(options, {
-                body: data,
-                json: true
+                form: data
+                ,json: false
             });
         }
         request(options, (error, response, body) => {
