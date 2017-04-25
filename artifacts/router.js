@@ -38,18 +38,18 @@ router.get('/api/load/features', (req, res, next) => {
 router.post('/api/feature/supported', (req, res, next) => {
     try {
         let featurePlatform = req.body;
-        if(!featurePlatform.Feature){
+        if (!featurePlatform.Feature) {
             featurePlatform.Feature = 'Loopback';
         }
-        if(!featurePlatform.Platform){
+        if (!featurePlatform.Platform) {
             featurePlatform.Platform = 'J2320';
         }
-        pathFinder.isFeatureSupportedInPlatform(featurePlatform.Feature, featurePlatform.Platform, res);
+        pathFinder.isFeatureSupportedInPlatform(featurePlatform.Feature, featurePlatform.Platform.replace(/\s/g, ""), res);
     } catch (error) {
         let err = new def.NError(500, messages.errInternalServerError, error.message);
         next(err);
     }
-})
+});
 
 router.get('/api/feature', (req, res, next) => {
     try {
