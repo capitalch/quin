@@ -37,6 +37,7 @@ let featureNames = [];
     let sub3 = handler
         .filterOn('post:path:finder:feature:details')
         .subscribe(d => {
+            let ret=false;
             if (d.data.error) {
                 console.log(d.data.error);
                 let err = new def.NError(501, messages.errFeatureFamiliesLoadingError, d.data.error)
@@ -44,7 +45,8 @@ let featureNames = [];
             } else {
                 let results = JSON.parse(d.data);
                 let selection = results.find(x => x.relPlatformVO.platform.toLowerCase() == d.res.platformName.toLowerCase());
-                let platform = selection.relPlatformVO.platform;
+                let platform = selection && selection.relPlatformVO.platform;                
+                // let platform = selection.relPlatformVO.platform;
                 if (platform) {
                     ret = true;
                 }
